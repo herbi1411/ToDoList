@@ -1,9 +1,10 @@
 import React from "react";
+import ToDoList from "components/ToDoList";
 
-const Home = () => {
+const Home = ({userObj}) => {
     return (
         <div>
-            Home
+            <ToDoList userObj = {userObj}/>
         </div>
     );
 }
