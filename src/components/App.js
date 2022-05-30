@@ -6,12 +6,11 @@ import { AuthService } from "fbase";
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userObj, setUserObj] = useState();
-  const [init, setInit] = useState(false);
+  const [init, setInit] = useState(true);
 
   useEffect(()=>{
     onAuthStateChanged(AuthService, (user) => {
       if(user){
-        setIsLoggedIn(true);
         setUserObj({
           uid : user.uid,
           photoURL : user.photoURL,
@@ -25,15 +24,16 @@ function App() {
             }));
           },
         });
+        setIsLoggedIn(true);
       }else{
         setIsLoggedIn(false);
       }
-      setInit(true);
+      setInit(false);
     })
   },[]);
   return (
       <>
-        {!init ? "initiallizing..." : (
+        {init ? <span>initiallizing...</span> : (
           <>
             <AppRouter isLoggedIn = {isLoggedIn} userObj = {userObj}/>
             <footer>&copy;ToDoList {new Date().getFullYear()}</footer>
