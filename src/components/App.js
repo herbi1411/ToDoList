@@ -17,6 +17,13 @@ function App() {
           photoURL : user.photoURL,
           displayName : user.displayName,
           email : user.email,
+          refreshUser : function(){
+            const user = AuthService.currentUser;
+            setUserObj((prev) => ({
+              ...prev,  
+              displayName : user.displayName,
+            }));
+          },
         });
       }else{
         setIsLoggedIn(false);
