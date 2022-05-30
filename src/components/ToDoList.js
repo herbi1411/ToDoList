@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react"
 import ToDoForm from "./ToDoForm"
 import { onSnapshot, doc, query, collection, where, orderBy } from "firebase/firestore";
 import { DBService } from "fbase";
-import ToDoElement from "./TodoElement";
+import ToDoElement from "./ToDoElement";
 
 const ToDoList = ({userObj}) => {
     const [toDos, settoDos] = useState([]);
