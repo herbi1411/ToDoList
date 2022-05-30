@@ -5,7 +5,7 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   return (
       <>
-        <AppRouter/>
+        <AppRouter isLoggedIn = {isLoggedIn}/>
         <footer>&copy;ToDoList {new Date().getFullYear()}</footer>
       </>
   );
