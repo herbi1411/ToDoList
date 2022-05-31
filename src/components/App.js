@@ -16,6 +16,7 @@ function App() {
           photoURL : user.photoURL,
           displayName : user.displayName,
           email : user.email,
+          updatedAt : user.updatedAt,
           refreshUser : function(){
             const user = AuthService.currentUser;
             setUserObj((prev) => ({

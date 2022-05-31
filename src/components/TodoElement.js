@@ -3,6 +3,8 @@ import { deleteDoc, doc, updateDoc } from "firebase/firestore";
 import { DBService } from "fbase";
 
 const ToDoElement = ({data}) => {
+    const [editing, setEditing] = useState(false);
+    const [newTodo, setNewTodo] = useState(data.value);
     const onDeleteClick = async(event) => {
         try{
             deleteDoc(doc(DBService,"ToDoList",data.id));
@@ -19,6 +21,26 @@ const ToDoElement = ({data}) => {
         {
             console.log(error.message);
         }
+    } 
+    const onEditClick = () => setEditing(true);
+    const onChange = (event) => {
+        const {target:{value}} = event;
+        setNewTodo(value);
+    }
+    const onAdmitClick = async() => {
+        try{
+            await updateDoc(doc(DBService, "ToDoList",data.id), {
+                value: newTodo,
+                updatedAt: Date.now(),
+            });
+            setEditing(false);
+        }catch(error){
+            console.log(error.message);
+        }
+    }
+    const onCancelClick = () => {
+        setNewTodo(data.value);
+        setEditing(false);
     }
     return (
     <li>
@@ -30,9 +52,19 @@ const ToDoElement = ({data}) => {
             </>
         ) : (
             <>
-                <div className="checkbox checkbox-off" onClick = {toggleCheckClick}></div>
-                <span className="to-do-children-unchecked todo-data">{data.value}</span>
-                <button onClick={onDeleteClick}>Delete</button>
+                {!editing? (
+                <>
+                    <div className="checkbox checkbox-off" onClick = {toggleCheckClick}></div>
+                    <span className="to-do-children-unchecked todo-data">{data.value}</span>
+                    <button onClick={onEditClick}>Edit</button>
+                    <button onClick={onDeleteClick}>Delete</button>
+                </>) : (
+                <>
+                    <div className="checkbox checkbox-off" onClick = {toggleCheckClick}></div>
+                    <input type="text" value={newTodo} placeholder="Edit toDo" onChange = {onChange} required/> 
+                    <button onClick={onAdmitClick}>Admit</button>
+                    <button onClick={onCancelClick}>Cancel</button>
+                </>)}
             </>
         )}
     </li>
