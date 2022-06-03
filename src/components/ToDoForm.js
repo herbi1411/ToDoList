@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { DBService } from "fbase";
 import { addDoc, collection } from "firebase/firestore";
+import axios from "axios";
 
 const ToDoForm = ({userObj}) => {
     const [toDo, setToDo] = useState("");
@@ -12,12 +13,25 @@ const ToDoForm = ({userObj}) => {
     const onSubmit = async(event) => {
         event.preventDefault();
         try{
-            await addDoc(collection(DBService, "ToDoList"),{
+            // Firebase
+            // await addDoc(collection(DBService, "ToDoList"),{
+            //     uid : userObj.uid,
+            //     isDone : false,
+            //     createdAt: Date.now(),
+            //     value: toDo,
+            // });
+            //Node js
+            const data = {
                 uid : userObj.uid,
                 isDone : false,
                 createdAt: Date.now(),
                 value: toDo,
-            });
+            }
+            await axios.post('http://127.0.0.1:4500/',data,{
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            })
         }catch(error){
             console.log(error.message);
         }
