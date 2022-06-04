@@ -24,9 +24,16 @@ const ToDoElement = ({userObj, data}) => {
     }
     const toggleCheckClick = async() => {
         try{
-            updateDoc(doc(DBService, "ToDoList",data.id), {
+            //Fireabse
+            // updateDoc(doc(DBService, "ToDoList",data.id), {
+            //     isDone : !data.isDone,
+            // });
+
+            //NodeJS
+            await axios.put(`http://127.0.0.1:4500/todoid/isDone/${data.id}`,{
                 isDone : !data.isDone,
-            });
+                uid: userObj.uid,
+            })
         }catch(error)
         {
             console.log(error.message);
@@ -39,10 +46,21 @@ const ToDoElement = ({userObj, data}) => {
     }
     const onAdmitClick = async() => {
         try{
-            await updateDoc(doc(DBService, "ToDoList",data.id), {
-                value: newTodo,
-                updatedAt: Date.now(),
-            });
+            //Firebase
+            // await updateDoc(doc(DBService, "ToDoList",data.id), {
+            //     value: newTodo,
+            //     updatedAt: Date.now(),
+            // });
+
+            //Nodejs
+            try{
+                await axios.put(`http://127.0.0.1:4500/todoid/${data.id}`,{
+                    value : newTodo,
+                    uid : userObj.uid
+                });
+            }catch(error){
+                console.log(error)
+            }
             setEditing(false);
         }catch(error){
             console.log(error.message);
