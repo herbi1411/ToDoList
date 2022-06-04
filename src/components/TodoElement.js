@@ -1,13 +1,23 @@
 import React, { useState } from "react";
 import { deleteDoc, doc, updateDoc } from "firebase/firestore";
 import { DBService } from "fbase";
+import axios from "axios";
 
-const ToDoElement = ({data}) => {
+const ToDoElement = ({userObj, data}) => {
     const [editing, setEditing] = useState(false);
     const [newTodo, setNewTodo] = useState(data.value);
     const onDeleteClick = async(event) => {
         try{
-            deleteDoc(doc(DBService,"ToDoList",data.id));
+            //Firebase
+            // deleteDoc(doc(DBService,"ToDoList",data.id));
+            //NodeJS
+            axios.delete(`http://127.0.0.1:4500/todoid/${data.id}`,{
+                data: {
+                    uid : userObj.uid
+                }
+            })
+                .then((response) => {/* */})
+                .catch((error) => {console.log(error)});
         }catch(error){
             console.log(error.message);
         } 

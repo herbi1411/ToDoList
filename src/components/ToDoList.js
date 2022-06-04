@@ -25,13 +25,20 @@ const ToDoList = ({userObj}) => {
         // });
         //NodeJS
         getAxiosTodos();
+        const socket = new WebSocket("ws://127.0.0.1:4500");
+        socket.addEventListener("open", () => {
+            socket.send(userObj.uid);
+        })
+        socket.addEventListener("message",(message) => {
+            getAxiosTodos();
+        });
     },[]);
     return (
     <>
         <ToDoForm userObj = {userObj}/>
         {toDos ? (
         <div style={{overflow:"hidden"}}>
-            {toDos.map((value, index) => (<ul key={index} className="to-do-list"><ToDoElement data={value}/></ul>))}
+            {toDos.map((value, index) => (<ul key={index} className="to-do-list"><ToDoElement userObj = {userObj} data={value}/></ul>))}
         </div>
         ): ""}
     </>
